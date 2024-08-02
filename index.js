@@ -20,13 +20,19 @@ const corsOptions = {
     if (dominiosPermitidos.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      console.log("No jala");
+      console.log("No permitido por CORS:", origin);
       callback(new Error("No permitido por CORS"));
     }
   },
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
+
+// Manejo de las solicitudes preflight
+app.options("*", cors(corsOptions));
 
 app.use("/api/veterinarios", veterinarioRoutes);
 app.use("/api/pacientes", pacientesRoutes);
